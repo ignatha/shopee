@@ -3,3 +3,4 @@ env/*
 ENV/
 ENV/*
 config.py
+*.pyc
