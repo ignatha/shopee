@@ -29,6 +29,21 @@ class shopee:
 
 		return api_request
 
+	def GetOrderDetails(self,ordersn_list):
+		api 		= self.uri+"orders/detail"
+		data		= {
+			'partner_id': self.partner_id,
+			'shopid' : self.shopid,
+			'timestamp' : self.timestamp,
+			'ordersn_list' : ordersn_list,
+			}
+		data_string = json.dumps(data,sort_keys=False)
+		auth 		= self.Authentication(api,data_string)
+
+		api_request = requests.post(api, data = data_string, headers = {"Content-Type": "application/json", "Authorization": auth}, verify=True)
+
+		return api_request
+
 
 	def Authentication(self,api,data_string):
 		string_msg 	= '{}|{}'.format(api,data_string)

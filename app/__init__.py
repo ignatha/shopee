@@ -12,6 +12,15 @@ def index():
 	create_time_from	= int(time.mktime(datetime(2020, 3, 1).timetuple()))
 	create_time_to		= int(time.mktime(datetime.today().timetuple()))
 
-	GetOrdersList	= shopee.GetOrdersList(create_time_from,create_time_to,10)
+	GetOrdersList	= shopee.GetOrdersList(create_time_from,create_time_to,100)
 	data = json.loads(GetOrdersList.text)
+	return data
+
+
+@app.route('/orderdetail/<ordersn>')
+def orderdetail(ordersn):
+	ordersn_list = []
+	ordersn_list.append(ordersn) 
+	GetOrderDetails	= shopee.GetOrderDetails(ordersn_list)
+	data = json.loads(GetOrderDetails.text)
 	return data
