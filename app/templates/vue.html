@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Belajar Vue.js</title>
+	<!-- versi development, berisi peringatan yang sangat membantu -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+	  {{ pesan }}
+	</div>
+
+	<!-- Custom Js -->
+	<script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+</html>

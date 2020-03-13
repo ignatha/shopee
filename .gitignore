@@ -4,3 +4,4 @@ ENV/
 ENV/*
 config.py
 *.pyc
+*.db
