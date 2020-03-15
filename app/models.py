@@ -22,7 +22,7 @@ class recipient_address(db.Model):
 	penjualan = db.relationship('penjualan',backref=db.backref('recipient_address', lazy=True))
 	city = db.Column(db.String(30),  nullable=True)
 	district = db.Column(db.String(30),  nullable=True)
-	full_address = db.Column(db.String(100),  nullable=True)
+	full_address = db.Column(db.String(1000),  nullable=True)
 	name = db.Column(db.String(30),  nullable=True)
 	phone = db.Column(db.String(15),  nullable=True)
 	state = db.Column(db.String(30),  nullable=True)
@@ -30,7 +30,7 @@ class recipient_address(db.Model):
 	zipcode = db.Column(db.String(7),  nullable=True)
 
 class order_detail(db.Model):
-	id = db.Column(db.String(10), primary_key=True)
+	id = db.Column(db.Integer, primary_key=True)
 	ordersn = db.Column(db.String(20), db.ForeignKey('penjualan.ordersn'),  nullable=True)
 	penjualan = db.relationship('penjualan',backref=db.backref('order_detail', lazy=True))
 	item_id = db.Column(db.String(30),  nullable=True)
