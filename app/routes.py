@@ -14,35 +14,23 @@ def index():
 	data = json.loads(GetOrdersList.text)
 	return data
 
-@app.route('/transactionlist')
-def transactionlist():
+@app.route('/checkpayment/<ordersn>')
+def checkpayment(ordersn):
 	today = datetime.today()
 	pass_15 = today - timedelta(days=15)
 	create_time_from	= int(time.mktime(pass_15.timetuple()))
 	create_time_to		= int(time.mktime(today.timetuple()))
 
-	TransactionList	= shopee.GetTransactionList(create_time_from,create_time_to,100)
-	data = json.loads(TransactionList.text)
+	CheckPayment	= shopee.GetTransactionList(create_time_from,create_time_to,100)
+	data = json.loads(CheckPayment.text)
 
-	payment_order_list = data["transaction_list"]
-	for item in payment_order_list:
-		if item['ordersn'] == '':
-			payment_order_list.remove(item)
+	return  controller.addPayment(data,ordersn)
 
-	return  json.dumps(payment_order_list)
-
-
-@app.route('/orderdetail/<ordersn>')
-def orderdetail(ordersn):
+@app.route('/addorder/<ordersn>')
+def addorder(ordersn):
 	ordersn_list = []
 	ordersn_list.append(ordersn) 
 	GetOrderDetails	= shopee.GetOrderDetails(ordersn_list)
 	data = json.loads(GetOrderDetails.text)
-	print data
-	controller.GetOrder(data)
 
-	return "ok"
-
-@app.route('/vue')
-def vue():
-	return render_template('vue.html')
+	return controller.GetOrder(data)

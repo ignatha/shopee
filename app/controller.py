@@ -1,10 +1,20 @@
-from app import app, shopee, models
+"""controller.py is file for handle any function in this app
+"""
 import time, json
+from app import app, shopee, models
 from datetime import datetime, date, timedelta
 
 def GetOrder(data):
+	"""GetOrder function can grab order detail from shopee api and add to the database
+	
+	Args:
+	    data ( json ): response from shopee open platform GetOrderDetails method
+	
+	Returns:
+	    json: msg status 
+	"""
 	for item in data['orders']:
-		p = models.penjualan(
+		order = models.penjualan(
 			ordersn=item['ordersn'],
 			create_time=datetime.utcfromtimestamp(item['create_time']),
 			buyer_username=item['buyer_username'],
@@ -16,7 +26,7 @@ def GetOrder(data):
 			)
 
 		recipent = item['recipient_address']
-		r = models.recipient_address(
+		order_recipent = models.recipient_address(
 			city=recipent['city'],
 			district=recipent['district'],
 			full_address=recipent['full_address'],
@@ -27,10 +37,10 @@ def GetOrder(data):
 			zipcode=recipent['zipcode']
 			)
 		
-		p.recipient_address.append(r)
+		order.recipient_address.append(order_recipent)
 
 		for detail in item['items']:
-			o = models.order_detail(
+			order_detail = models.order_detail(
 				item_id=detail['item_id'],
 				item_name=detail['item_name'],
 				item_sku=detail['item_sku'],
@@ -40,7 +50,47 @@ def GetOrder(data):
 				variation_id=detail['variation_id'],
 				variation_quantity_purchased=detail['variation_quantity_purchased']
 				)
-			p.order_detail.append(o)
+			order.order_detail.append(order_detail)
 
-		models.db.session.add(p)
+		models.db.session.add(order)
 		models.db.session.commit()
+
+		response = {
+				"status":"success",
+				"msg":"Data added successfully"
+				}
+		return json.dumps(response)
+
+def addPayment(data,ordersn):
+	"""addPayment, this method can check if order has been paid
+	
+	Args:
+	    data (json): response from shopee open platform GetTransactionList method
+	    ordersn (string): ordersn is identity from shopee order 
+	
+	Returns:
+	    json: msg status
+	"""
+	payment_order = data["transaction_list"]
+	for item in payment_order:
+		if item['ordersn'] == ordersn:
+			order = models.db.session.query(models.penjualan).get(ordersn)
+			payment = models.pembayaran(
+				amount=item['amount'],
+				status=item['status']
+				)
+			order.pembayaran.append(payment)
+			models.db.session.add(order)
+			models.db.session.commit()
+
+			response = {
+				"status":"success",
+				"msg":"Data updated successfully"
+				}
+			return json.dumps(response)
+
+	response = {
+		"status":"error",
+		"msg":"Data not found"
+		}
+	return json.dumps(response)	
