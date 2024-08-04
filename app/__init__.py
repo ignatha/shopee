@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 # test ini editan
 
+# perubahan di sisi develop
+
+
 app = Flask(__name__)
 app.config.from_object('config')
 
