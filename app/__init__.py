@@ -2,6 +2,12 @@ from flask import Flask
 from app import shopee
 from flask_sqlalchemy import SQLAlchemy
 
+# test ini editan
+
+# perubahan di sisi develop
+
+## penmabhaan baru dari develop
+
 app = Flask(__name__)
 app.config.from_object('config')
 
