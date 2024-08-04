@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # perubahan di sisi develop
 
+## penmabhaan baru dari develop
 
 app = Flask(__name__)
 app.config.from_object('config')
